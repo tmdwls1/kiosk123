@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>키오스크 메인 화면</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        /* 모달 스타일 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 10px;
+        }
+
+        .modal-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .modal-content table th,
+        .modal-content table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .modal-content .summary {
+            margin-bottom: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-buttons button:first-child {
+            background-color: #ccc;
+            color: black;
+        }
+
+        .modal-buttons button:last-child {
+            background-color: #FF6347;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>교육용 키오스크</h1>
+    </header>
+    <div class="menu">
+        <button class="hover-button" onclick="location.href='choice.html'">초급</button>
+        <button class="hover-button" onclick="location.href='choice.html'">중급</button>
+        <button class="hover-button" onclick="location.href='choice.html'">고급</button>
+        <button class="hover-button" onclick="location.href='choice.html'">자유연습</button>
+    </div>
+
+    <!-- 주문 내역 확인 모달 -->
+    <div id="order-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>주문내역확인</h2>
+            <p>주문 정보를 확인해 주세요.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>주문내역</th>
+                        <th>수량</th>
+                        <th>금액</th>
+                    </tr>
+                </thead>
+                <tbody id="order-details">
+                    <!-- 주문 내역이 여기에 추가됩니다 -->
+                </tbody>
+            </table>
+            <div class="summary">
+                <p>총 수량: <span id="total-quantity">0</span>개</p>
+                <p>주문금액: <span id="total-price">0</span>원</p>
+            </div>
+            <div class="modal-buttons">
+                <button onclick="closeModal()">닫기</button>
+                <button onclick="confirmOrder()">결제</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cartItems = []; // 주문 내역 저장
+
+        function addToCart(name, price) {
+            const existingItem = cartItems.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cartItems.push({ name, price, quantity: 1 });
+            }
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartList = document.getElementById('cart-items');
+            cartList.innerHTML = ''; // 기존 내용 초기화
+
+            cartItems.forEach((item, index) => {
+                const cartItem = document.createElement('li');
+                cartItem.className = 'cart-item';
+
+                cartItem.innerHTML = `
+                    <span class="item-name">${item.name}</span>
+                    <div class="item-controls">
+                        <button onclick="decreaseQuantity(${index})">-</button>
+                        <span>${item.quantity}개</span>
+                        <button onclick="increaseQuantity(${index})">+</button>
+                        <span>${item.price * item.quantity}원</span>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(${index})">X</button>
+                `;
+
+                cartList.appendChild(cartItem);
+            });
+
+            calculateTotal(); // 총 금액 업데이트
+        }
+
+        function increaseQuantity(index) {
+            cartItems[index].quantity++;
+            updateCart();
+        }
+
+        function decreaseQuantity(index) {
+            if (cartItems[index].quantity > 1) {
+                cartItems[index].quantity--;
+            } else {
+                removeItem(index);
+            }
+            updateCart();
+        }
+
+        function removeItem(index) {
+            cartItems.splice(index, 1); // 해당 상품 삭제
+            updateCart();
+        }
+
+        function calculateTotal() {
+            const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+            document.getElementById('total-price').textContent = total;
+            document.getElementById('total-quantity').textContent = total;
+        }
+
+        function openModal() {
+            const modal = document.getElementById('order-modal');
+            const orderDetails = document.getElementById('order-details');
+            modal.classList.remove('hidden');
+
+            orderDetails.innerHTML = ''; // 기존 내용 초기화
+            cartItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price * item.quantity}원</td>
+                `;
+                orderDetails.appendChild(row);
+            });
+
+            calculateTotal(); // 총 금액 업데이트
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('order-modal');
+            modal.classList.add('hidden');
+        }
+
+        function confirmOrder() {
+            alert('결제가 완료되었습니다!');
+            closeModal();
+            cartItems.length = 0; // 주문 내역 초기화
+            updateCart();
+        }
+    </script>
+</body>
+</html>

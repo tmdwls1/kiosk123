@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/choice.css">
+    <title>이미지 선택 화면</title>
+</head>
+<body>
+    <h1>원하시는 무인 발급기를 선택해주세요</h1>
+    <div class="container">
+        <span class="arrow" onclick="prevImages()">⟨</span>
+        <div class="cards-wrapper">
+            <div class="cards-container" id="cardsContainer">
+                <div class="card">
+                    <a href="restaurant_kio.html"><img src="img/food.png" alt="패스트푸드"></a>
+                    <div>음식점</div>
+                </div>
+                <div class="card">
+                    <img src="img/coffee.png" alt="커피숍">
+                    <div>커피</div>
+                </div>
+                <div class="card">
+                    <img src="img/atm.png" alt="은행 atm">
+                    <div>은행 atm</div>
+                </div>
+                <div class="card">
+                    <img src="img/bus.png" alt="영화관 예약">
+                    <div>버스 예매</div>
+                </div>
+                <div class="card">
+                    <img src="img/airplane.png" alt="비행기 예약">
+                    <div>비행기 예매</div>
+                </div>
+                <div class="card">
+                    <img src="img/train.png" alt="기차 예약">
+                    <div>기차 예매</div>
+                </div>
+            </div>
+        </div>
+        <span class="arrow" onclick="nextImages()">⟩</span>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const cardsContainer = document.getElementById('cardsContainer');
+        const cards = document.querySelectorAll('.card');
+        const cardsPerPage = 3; // 한 번에 보여줄 카드 수
+        const cardWidth = 250 + 20; // 카드 너비 + margin
+
+        function updateDisplay() {
+            const offset = -currentIndex * cardWidth;
+            cardsContainer.style.transform = `translateX(${offset}px)`; // 부드럽게 이동
+        }
+
+        function nextImages() {
+            if (currentIndex < cards.length - cardsPerPage) {
+                currentIndex++;
+                updateDisplay();
+            }
+        }
+
+        function prevImages() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateDisplay();
+            }
+        }
+    </script>
+</body>
+</html>
