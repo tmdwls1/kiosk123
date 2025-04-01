@@ -6,6 +6,7 @@
     <title>Easy KIOSK</title>
     <link rel="stylesheet" href="css/restaurant_kio.css">
     <script>
+        // 상단 메뉴 클릭시 메뉴 전환
         function showTab(tabName) {
             const tabs = document.querySelectorAll('.menu-grid');
             tabs.forEach(tab => tab.classList.add('hidden'));
@@ -17,25 +18,26 @@
         }
     </script>
     <script>
-        let time = 0; // 초기 시간 설정
-        const maxTime = 30; // 최대 시간 설정
-
+        
+        // 타이머 설정 
+        let time = 120; // 초기 시간 설정
         function startTimer() {
             const timerElement = document.querySelector('.timer .time');
             const interval = setInterval(() => {
-                if (time < maxTime) {
-                    time++;
+                if (time > 0) {
+                    time--; // 1초씩 감소
                     timerElement.textContent = `${time}초`;
                 } else {
                     clearInterval(interval); // 타이머 중지
                 }
             }, 1000); // 1초마다 실행
         }
-
         // 페이지 로드 시 타이머 시작
         window.onload = startTimer;
+        
     </script>
     <script>
+        
         const cartItems = []; // 주문 내역 저장
 
         function addToCart(name, price) {
@@ -64,6 +66,7 @@
                 cartItem.className = 'cart-item';
 
                 cartItem.innerHTML = `
+                    <button class="remove-btn" onclick="removeItem(${index})">X</button>
                     <span class="item-name">${item.name}</span>
                     <div class="item-controls">
                         <button onclick="decreaseQuantity(${index})">-</button>
@@ -71,7 +74,6 @@
                         <button onclick="increaseQuantity(${index})">+</button>
                         <span>${item.price * item.quantity}원</span>
                     </div>
-                    <button class="remove-btn" onclick="removeItem(${index})">X</button>
                 `;
 
                 cartList.appendChild(cartItem);
@@ -102,6 +104,11 @@
             const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0); // 총 금액 계산
             const payButton = document.querySelector('.btn.pay');
             payButton.textContent = `${total}원 결제하기`; // 버튼에 총 금액 표시
+        }
+
+        function clearCart() {
+            cartItems.length = 0; // 담은 상품 목록 초기화
+            updateCart(); // 화면 업데이트
         }
     </script>
 </head>
@@ -201,7 +208,7 @@
                 <!-- 남은시간과 전체삭제 버튼 -->
                 <div class="timer-delete-row">
                     <div class="timer">남은시간 <br><span class="time">0초</span></div>
-                    <button class="btn delete">전체삭제</button>
+                    <button class="btn delete" onclick="clearCart()">전체삭제</button>
                 </div>
                 <!-- 선택한 상품 버튼 -->
                 <button class="btn select">선택한 상품</button>
