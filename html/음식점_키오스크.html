@@ -16,6 +16,7 @@
             tabButtons.forEach(button => button.classList.remove('active'));
             document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
         }
+        
     </script>
     <script>
         
@@ -111,23 +112,87 @@
             updateCart(); // 화면 업데이트
         }
     </script>
+    <style>
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+        }
+
+        .modal ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .modal ul li {
+            margin-bottom: 10px;
+        }
+
+        .modal .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal .btn.confirm {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .modal .btn.cancel {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 헤더 -->
+    
+    <header>
         <div class="header">
             <div class="icon">🏠</div>
-            <h1>Easy KIOSK</h1>
+            <h1>음식점 키오스크</h1>
             <div class="icon">+</div>
         </div>
 
-        <!-- 탭 메뉴 -->
         <div class="tabs">
             <div class="tab active" data-tab="season-menu" onclick="showTab('season-menu')">메뉴1</div>
             <div class="tab" data-tab="coffee-hot" onclick="showTab('coffee-hot')">메뉴2</div>
             <div class="tab" data-tab="coffee-ice" onclick="showTab('coffee-ice')">메뉴3</div>
         </div>
+    </header>    
 
+
+    <main>
         <!-- 메뉴1 -->
         <div class="menu-grid" id="season-menu">
             <div class="menu-item" onclick="addToCart('된장찌개', 4000)">
@@ -155,7 +220,9 @@
                 <div class="name">돈까스</div>
                 <div class="price">5000원</div>
             </div>
-        </div>        <!-- 메뉴2 -->
+        </div>
+
+        <!-- 메뉴2 -->
         <div class="menu-grid hidden" id="coffee-hot">
             <div class="menu-item">
                 <img src="americano.png" alt="메뉴1">
@@ -192,7 +259,9 @@
                 <div class="price">4500원</div>
             </div>
         </div>
+    </main>
 
+    <footer>
         <!-- 주문 내역 및 버튼 -->
         <div class="order-section">
             <!-- 담은 물건 표시 영역 -->
@@ -216,6 +285,53 @@
                 <button class="btn pay" onclick="calculateTotal()">결제하기</button>
             </div>
         </div>
+    </footer>
+
+    <!-- Modal for order summary -->
+    <div class="modal-overlay" id="order-modal">
+        <div class="modal">
+            <h2>주문 내역 확인</h2>
+            <ul id="order-summary">
+                <!-- 주문 내역이 여기에 추가됩니다 -->
+            </ul>
+            <div class="modal-buttons">
+                <button class="btn confirm" onclick="confirmOrder()">확인</button>
+                <button class="btn cancel" onclick="closeModal()">취소</button>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Show the modal
+        function showModal() {
+            const modal = document.getElementById('order-modal');
+            const orderSummary = document.getElementById('order-summary');
+            modal.style.display = 'flex';
+
+            // Populate the order summary
+            orderSummary.innerHTML = '';
+            cartItems.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${item.name} - ${item.quantity}개 - ${item.price * item.quantity}원`;
+                orderSummary.appendChild(listItem);
+            });
+        }
+
+        // Close the modal
+        function closeModal() {
+            const modal = document.getElementById('order-modal');
+            modal.style.display = 'none';
+        }
+
+        // Confirm the order
+        function confirmOrder() {
+            alert('주문이 완료되었습니다!');
+            closeModal();
+            clearCart(); // Clear the cart after confirming the order
+        }
+
+        // Attach the modal to the "결제하기" button
+        document.querySelector('.btn.pay').addEventListener('click', showModal);
+    </script>
 </body>
 </html>

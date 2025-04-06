@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>키오스크 메인 화면</title>
+    <style>
+        *{
+            margin:0;
+            padding: 0;
+        }
+
+        body {
+            background: #55555542;
+            padding:  0 350px;
+        }
+        
+        main{
+            background: #f5f5f5; 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%; 
+            max-width: 600px; 
+        }
+
+        .menu button {
+            all: unset; /* 기본 버튼 스타일 제거 */
+            display: block;
+            width: 100%; /* 버튼이 메뉴 전체를 차지하도록 설정 */
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 150px;
+            cursor: pointer; /* 버튼처럼 보이도록 커서 변경 */
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.02); /* 호버 시 약간 확대 */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item img {
+            height: 100px;
+            border-radius: 10px;
+        }
+
+        .menu-item .text {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .menu-item .text h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .menu-item .text p {
+            font-size: 14px;
+            color: #555;
+        }
+
+
+    </style>
+</head>
+<body>
+    
+    <main>
+        <div class="menu">
+            
+            <button onclick="location.href='난이도.html'">
+                <div class="menu-item">
+                    <img src="img/키오스크연습하기.png" alt="키오스크 체험교육 이미지" />
+                    <div class="text">
+                        <h2>키오스크 연습하기기</h2>
+                        <p>키오스크 사용법을 배우는 체험 교육입니다.</p>
+                    </div>
+                </div>
+            </button>
+
+            <button>
+                <div class="menu-item">
+                    <img src="#" alt="메뉴2" />
+                    <div class="text">
+                        <h2>단어 검색</h2>
+                        <p>궁금한 단어가 있으면 검색 해주세요.</p>
+                    </div>
+                </div>
+            </button>
+
+            <button>
+                <div class="menu-item">
+                    <img src="#" alt="메뉴3" />
+                    <div class="text">
+                        <h2>메뉴3</h2>
+                        <p>메뉴3 나중에 추가 예정.</p>
+                    </div>
+                </div>
+            </button>
+
+        </div>
+    </main>
+</body>
+</html>
