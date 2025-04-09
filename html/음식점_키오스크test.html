@@ -139,9 +139,13 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             text-align: center;
             font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
         }
 
         .modal-header {
+            color: #f0f0f0;
             background-color: #FF6347;
             padding: 10px;
             border-radius: 10px 10px 0 0;
@@ -188,10 +192,11 @@
         }
 
         .modal-buttons {
-            margin-top: 20px;
             display: flex;
             justify-content: space-around;
-            
+            margin-top: auto; 
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
         }
 
         .modal-buttons .btn {
@@ -208,9 +213,78 @@
         }
 
         .modal-buttons .btn.takeout {
-            background-color: #ffd600;
+            background-color: #ffffff;
             color: black;
         }
+
+        /* Payment Method Modal Styles */
+        .payment-modal {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 600px;
+        }
+
+        .payment-modal-header {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .payment-total {
+            background-color: #FF6347;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .payment-option {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .payment-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .payment-option img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        .payment-option span {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .pay1{
+            background: url("img/결제/신용카드.png");
+            background-size: cover;;
+
+        }
+        
     </style>
 </head>
 <body>
@@ -303,6 +377,7 @@
         
         <!-- 주문 내역 및 버튼 -->
         <div class="order-section">
+
             <!-- 담은 물건 표시 영역 -->
             <div class="cart-section">
                 <h3>담은 상품</h3>
@@ -328,7 +403,7 @@
         </div>
     </footer>
 
-    <!-- 결제하기 -> 주문 내역  -->
+    <!-- 모달 창 -->
     <div class="modal-overlay" id="order-modal">
         <div class="modal">
             <div class="modal-header">주문내역확인</div>
@@ -351,14 +426,51 @@
                 <div><span>할인금액:</span> <span>0원</span></div>
                 <div><span>결제할 금액:</span> <span id="final-amount">0원</span></div>
             </div>
-            <div class="modal1-buttons">
-                <button class="btn store" onclick="confirmOrder('매장식사')">매장식사</button>
-                <button class="btn takeout" onclick="confirmOrder('포장')">포장</button>
+            <div class="modal-buttons">
+                <button class="btn store" onclick="confirmOrder()">결제하기</button>
+                <button class="btn takeout" onclick="closeModal()">주문 취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 결제하기 모달 창 -->
+    <div class="modal-overlay" id="payment-modal" style="display: none;">
+        <div class="payment-modal">
+            <div class="payment-modal-header">결제 방법을 선택해 주세요</div>
+            <div class="payment-total">총 결제금액 | <span id="payment-total-amount">0원</span></div>
+            
+            <div class="payment-options">
+                <div class="payment-option pay1" onclick="selectPayment('신용카드')">
+                    <span>신용카드</span>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment('페이')">
+                    <img src="img/pay.png" alt="페이">
+                    <span>페이</span>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment('모바일 쿠폰')">
+                    <img src="img/coupon.png" alt="모바일 쿠폰">
+                    <span>모바일 쿠폰</span>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment('바코드 할인')">
+                    <img src="img/barcode.png" alt="바코드 할인">
+                    <span>바코드 할인</span>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment('기프트 카드')">
+                    <img src="img/gift-card.png" alt="기프트 카드">
+                    <span>기프트 카드</span>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
+
+        // 모달창 열기
 
         function showModal() {
             const modal = document.getElementById('order-modal');
@@ -390,21 +502,41 @@
             finalAmount.textContent = `${totalPrice}원`;
         }
 
-        // 닫기기
+        // 모달 창 닫기
         function closeModal() {
             const modal = document.getElementById('order-modal');
             modal.style.display = 'none';
         }
 
-        // 주문 완료 alert 
-        function confirmOrder(type) {
-            alert(`주문이 완료되었습니다! (${type})`);
-            closeModal();
-            clearCart(); // Clear the cart after confirming the order
+        // 주문 완료 알림창
+        function confirmOrder() {
+            closeModal(); // Close the order confirmation modal
+            showPaymentModal(); // Show the payment method modal
         }
 
         // 결제하기 버튼 클릭 시 모달 열기
         document.querySelector('.btn.pay').addEventListener('click', showModal);
+
+        // Show Payment Modal
+        function showPaymentModal() {
+            const paymentModal = document.getElementById('payment-modal');
+            const paymentTotalAmount = document.getElementById('payment-total-amount');
+            const totalAmount = document.getElementById('total-amount').textContent;
+            paymentTotalAmount.textContent = totalAmount;
+            paymentModal.style.display = 'flex';
+        }
+
+        // Close Payment Modal
+        function closePaymentModal() {
+            const paymentModal = document.getElementById('payment-modal');
+            paymentModal.style.display = 'none';
+        }
+
+        // Select Payment Method
+        function selectPayment(method) {
+            alert(`${method} 결제가 선택되었습니다.`);
+            closePaymentModal();
+        }
     </script>
 </body>
 </html>
