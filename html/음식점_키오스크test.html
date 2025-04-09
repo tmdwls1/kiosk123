@@ -79,12 +79,14 @@
             });
             calculateTotal(); // 총 금액 업데이트
         }
-
+        
+        // 수량 증가 
         function increaseQuantity(index) {
             cartItems[index].quantity++;
             updateCart();
         }
 
+        // 수량 감소
         function decreaseQuantity(index) {
             if (cartItems[index].quantity > 1) {
                 cartItems[index].quantity--;
@@ -93,9 +95,11 @@
             }
             updateCart();
         }
+        
 
+        // 해당 상품 삭제
         function removeItem(index) {
-            cartItems.splice(index, 1); // 해당 상품 삭제
+            cartItems.splice(index, 1); 
             updateCart();
         }
 
@@ -115,8 +119,7 @@
     </script>
     <style>
 
-        /* 주문 내역 확인 */
-
+        /* 결제하기 모달 창 */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -133,12 +136,10 @@
         .modal {
             background-color: white;
             border-radius: 10px;
-            padding: 30px; 
             width: 600px; 
             height: 600px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             text-align: center;
-            font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: space-between; 
@@ -153,6 +154,12 @@
             font-weight: bold;
         }
 
+        /* 모달 내부에 공백 추가 */
+        .modal-main {
+            height: 100vh;
+            margin: 20px;
+        }
+
         .modal h2 {
             margin: 20px 0 10px;
             font-size: 18px;
@@ -165,7 +172,7 @@
         }
 
         .order-table th, .order-table td {
-            border: 1px solid #ddd;
+            
             padding: 8px;
             text-align: center;
         }
@@ -194,8 +201,7 @@
         .modal-buttons {
             display: flex;
             justify-content: space-around;
-            margin-top: auto; 
-            padding-top: 20px;
+            padding: 20px;
             border-top: 1px solid #ddd;
         }
 
@@ -207,17 +213,8 @@
             cursor: pointer;
         }
 
-        .modal-buttons .btn.store {
-            background-color: white;
-            color: black;
-        }
 
-        .modal-buttons .btn.takeout {
-            background-color: #ffffff;
-            color: black;
-        }
-
-        /* Payment Method Modal Styles */
+        /* 결제 방법 선택 모달 창*/
         .payment-modal {
             background-color: white;
             border-radius: 10px;
@@ -225,7 +222,6 @@
             width: 600px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             text-align: center;
-            font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -284,7 +280,7 @@
             background-size: cover;;
 
         }
-        
+
     </style>
 </head>
 <body>
@@ -403,28 +399,30 @@
         </div>
     </footer>
 
-    <!-- 모달 창 -->
+    <!-- 주문 내역 확인 모달 창 -->
     <div class="modal-overlay" id="order-modal">
         <div class="modal">
             <div class="modal-header">주문내역확인</div>
-            <h2>주문 정보를 확인해 주세요.</h2>
-            <table class="order-table">
-                <thead>
-                    <tr>
-                        <th>주문내역</th>
-                        <th>수량</th>
-                        <th>금액</th>
-                    </tr>
-                </thead>
-                <tbody id="order-summary">
-                    <!-- 주문 내역이 여기에 추가됩니다 -->
-                </tbody>
-            </table>
-            <div class="summary">
-                <div><span>총 수량:</span> <span id="total-quantity">0개</span></div>
-                <div><span>주문금액:</span> <span id="total-amount">0원</span></div>
-                <div><span>할인금액:</span> <span>0원</span></div>
-                <div><span>결제할 금액:</span> <span id="final-amount">0원</span></div>
+            <div class="modal-main">
+                <h2>주문 정보를 확인해 주세요.</h2>
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>주문내역</th>
+                            <th>수량</th>
+                            <th>금액</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-summary">
+                        <!-- 주문 내역이 여기에 추가됩니다 -->
+                    </tbody>
+                </table>
+                <div class="summary">
+                    <div><span>총 수량:</span> <span id="total-quantity">0개</span></div>
+                    <div><span>주문금액:</span> <span id="total-amount">0원</span></div>
+                    <div><span>할인금액:</span> <span>0원</span></div>
+                    <div><span>결제할 금액:</span> <span id="final-amount">0원</span></div>
+                </div>
             </div>
             <div class="modal-buttons">
                 <button class="btn store" onclick="confirmOrder()">결제하기</button>
