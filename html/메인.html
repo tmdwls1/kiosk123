@@ -50,9 +50,9 @@
         }
 
         .menu button {
-            all: unset; /* 기본 버튼 스타일 제거 */
+            all: unset; 
             display: block;
-            width: 100%; /* 버튼이 메뉴 전체를 차지하도록 설정 */
+            width: 100%; 
         }
 
         .menu-item {
@@ -65,14 +65,18 @@
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             height: 150px;
-            cursor: pointer; /* 버튼처럼 보이도록 커서 변경 */
+            cursor: pointer; 
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .menu-item:hover {
             transform: scale(1.02);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
             background-color: #f0f0f0;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);  
+        }
+
+        .menu-item:active {
+            background-color: #e8e6e6;
         }
 
         .menu-item img {
