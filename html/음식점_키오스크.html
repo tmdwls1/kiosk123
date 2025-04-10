@@ -59,9 +59,11 @@
         function updateCart() {
             const cartList = document.getElementById('cart-items');
             cartList.innerHTML = ''; // 기존 내용 초기화
+
             cartItems.forEach((item, index) => {
                 const cartItem = document.createElement('li');
                 cartItem.className = 'cart-item';
+
                 cartItem.innerHTML = `
                     <button class="remove-btn" onclick="removeItem(${index})">X</button>
                     <span class="item-name">${item.name}</span>
@@ -77,12 +79,13 @@
             });
             calculateTotal(); // 총 금액 업데이트
         }
-
+        
         // 수량 증가 
         function increaseQuantity(index) {
             cartItems[index].quantity++;
             updateCart();
         }
+
         // 수량 감소
         function decreaseQuantity(index) {
             if (cartItems[index].quantity > 1) {
@@ -92,6 +95,7 @@
             }
             updateCart();
         }
+        
 
         // 해당 상품 삭제
         function removeItem(index) {
@@ -115,21 +119,19 @@
     </script>
 
 
-
+        
     <style>
 
-        
-        /* 결제하기 모달 창*/
+        /* <!-- [결제창 1] - 주문 세부내역 확인 */
 
-        /* 주문 내역 확인 */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
+            background-color: rgba(0, 0, 0, 0.5); 
+            display: none; 
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -138,41 +140,293 @@
         .modal {
             background-color: white;
             border-radius: 10px;
-            padding: 20px;
-            width: 400px;
+            width: 600px; 
+            height: 700px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+        }
+
+        .modal-header {
+            color: #f0f0f0;
+            background-color: #FF6347;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .modal-main {
+            height: 100%;
+            margin: 20px;
+            position: relative; 
+        }
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        .order-table th, .order-table td {
+            
+            padding: 8px;
             text-align: center;
         }
 
-        .modal h2 {
-            margin-bottom: 20px;
+        .order-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
         }
 
-        .modal ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            text-align: left;
+        .summary {
+            font-size: 20px;
+            font-weight: bold;
+            position:absolute;
+            left: 0;
+            right: 0;
+            top: 450px;
         }
 
-        .modal ul li {
-            margin-bottom: 10px;
+        .summary div {
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .total, .quantity {
+             color: #FF6347;
         }
 
-        .modal .modal-buttons {
-            margin-top: 20px;
+        .modal-buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
+            padding: 20px;
+            border-top: 1px solid #ddd;
         }
 
-        .modal .btn {
+        .modal-buttons .btn {
             padding: 10px 20px;
-            border: none;
+            border: 1px solid #ddd;
             border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
         }
 
-    </style>
+
+
+
+     /* [결제창 2 ] - 결제 방법 선택 */
+
+    .payment-method-modal {
+        background-color: white;
+        border-radius: 10px;
+        width: 500px;
+        height: 300px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .payment-method-header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .payment-total {
+        background-color: #FF6347;
+        color: white;
+        padding: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .payment-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        width: 100%;
+    }
+
+    .payment-option {
+        padding: 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .payment-option:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .payment-option img {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 10px;
+    }
+
+
+    .payment-option {
+        background-size: cover; 
+        background-position: center; 
+        background-repeat: no-repeat; 
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 0; 
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        height: 110px; /* 버튼 높이 설정 */
+        position: relative; /* 텍스트 위치 조정을 위해 상대 위치 설정 */
+    }
+
+    .payment-option:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .payment-option span {
+        position: absolute;
+        margin-top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 13px;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+
+        /* [결제창 3 ] - 카드결제 가이드 */
+        .payment-guide-modal {
+            background-color: rgb(255, 255, 255);
+            border-radius: 10px;
+            width: 500px;
+            height: 500px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .payment-guide-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .payment-guide-image {
+            width: 100%;
+            max-width: 300px; 
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        /* [결제창 4 ]영수증 출력  여부*/
+        .receipt-modal {
+            background-color: white;
+            border-radius: 10px;
+            width: 300px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1100;
+            display: none;
+        }
+
+        .receipt-modal-header {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .receipt-modal-buttons {
+            display: flex;
+            justify-content: center
+        }
+
+        .receipt-modal-buttons .btn {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 5px;
+            width: 200px;
+        }
+
+        .receipt-modal-buttons .btn.yes {
+            background-color: #FF6347;
+            color: white;
+        }
+
+        .receipt-modal-buttons .btn.no {
+            background-color: #f0f0f0;
+        }
+
+    /* [결제창 5 ] 결제 완료, 주문번호 출력*/
+    .payment-complete-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* 투명한 검정색 배경 */
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1200;
+    }
+
+    .payment-complete-modal {
+        background-color: white;
+        border-radius: 10px;
+        width: 400px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+    .payment-complete-header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .payment-complete-text {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .order-number {
+        font-size: 36px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .receipt-image {
+        width: 100px;
+        height: auto;
+        margin: 20px auto;
+    }
+</style>
 </head>
 <body>
     
@@ -184,16 +438,16 @@
         </div>
 
         <div class="tabs">
-            <div class="tab active" data-tab="season-menu" onclick="showTab('menu1')">메뉴1</div>
-            <div class="tab" data-tab="coffee-hot" onclick="showTab('menu2')">메뉴2</div>
-            <div class="tab" data-tab="coffee-ice" onclick="showTab('menu3')">메뉴3</div>
+            <div class="tab active" data-tab="season-menu" onclick="showTab('season-menu')">메뉴1</div>
+            <div class="tab" data-tab="coffee-hot" onclick="showTab('coffee-hot')">메뉴2</div>
+            <div class="tab" data-tab="coffee-ice" onclick="showTab('coffee-ice')">메뉴3</div>
         </div>
     </header>    
 
 
     <main>
         <!-- 메뉴1 -->
-        <div class="menu-grid" id="menu1">
+        <div class="menu-grid" id="season-menu">
             <div class="menu-item" onclick="addToCart('된장찌개', 4000)">
                 <img src="img/된장찌개.jpg" alt="된장찌개">
                 <div class="name">된장찌개</div>
@@ -222,7 +476,7 @@
         </div>
 
         <!-- 메뉴2 -->
-        <div class="menu-grid hidden" id="menu2">
+        <div class="menu-grid hidden" id="coffee-hot">
             <div class="menu-item">
                 <img src="americano.png" alt="메뉴1">
                 <div class="name">메뉴1</div>
@@ -241,7 +495,7 @@
         </div>
 
         <!-- 메뉴3 -->
-        <div class="menu-grid hidden" id="menu3">
+        <div class="menu-grid hidden" id="coffee-ice">
             <div class="menu-item">
                 <img src="iced-americano.png" alt="메뉴1">
                 <div class="name">메뉴1</div>
@@ -260,10 +514,10 @@
         </div>
     </main>
 
-    <footer>
-        
+    <footer> 
         <!-- 주문 내역 및 버튼 -->
         <div class="order-section">
+
             <!-- 담은 물건 표시 영역 -->
             <div class="cart-section">
                 <h3>담은 상품</h3>
@@ -284,55 +538,228 @@
                 <button class="btn select">선택한 상품</button>
                 
                 <!-- 결제하기 버튼 -->
-                <button class="btn pay" onclick="calculateTotal()">결제하기</button>
+                <button class="btn pay" onclick="showModal()">결제하기</button>
             </div>
         </div>
     </footer>
 
-    <!-- 결제하기 모달 창  -->
+    
+    
+    <!-- [결제창 1] - 주문 세부내역 확인 -->
     <div class="modal-overlay" id="order-modal">
         <div class="modal">
-            <h2>주문 내역 확인2</h2>
-            <ul id="order-summary">
-                <!-- 주문 내역이 여기에 추가됩니다 -->
-            </ul>
+
+            <div class="modal-header">주문 세부내역을 다시 한번 확인하여 주세요</div>
+            
+            <div class="modal-main">
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>주문내역</th>
+                            <th>수량</th>
+                            <th>금액</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="order-summary">
+                        <!-- 주문 내역이 여기에 추가됩니다 -->
+                    </tbody>
+
+                </table>
+
+                <div class="summary">
+                    <div><span>총 수량:</span> <span id="total-quantity" class="quantity">0</span>개</div>
+                    <div><span>결제할 금액:</span> <span id="total-amount" class="total">0</span>원</div>
+                </div>
+                
+            </div>
             <div class="modal-buttons">
-                <button class="btn confirm" onclick="confirmOrder()">확인</button>
-                <button class="btn cancel" onclick="closeModal()">취소</button>
+                <button class="btn store" onclick="closeModal()">돌아가기</button>
+                <button class="btn takeout" onclick="showPaymentModal()">결제하기</button>
             </div>
         </div>
     </div>
 
-    <script>
 
-        // 결제하기 모달 창 열기
+     <!-- [결제창 2 ] - 결제 방법 선택 -->
+    <div class="modal-overlay" id="payment-method-modal" style="display: none;">
+        <div class="payment-method-modal">
+            <div class="payment-method-header">결제 방법을 선택해 주세요</div>
+            <div class="payment-total">총 결제금액 | <span id="payment-total-amount">0원</span></div>
+            <div class="payment-options">
+                <div class="payment-option" style="background-image: url('img/결제/신용카드.png');" onclick="selectPayment()">
+                    <span>신용카드</span>
+                </div>
+                <div class="payment-option" style="background-image: url('img/결제/페이.png');" onclick="selectPayment()">
+                    <span>페이</span>
+                </div>
+                <div class="payment-option" style="background-image: url('img/결제/쿠폰.png');" onclick="selectPayment()">
+                    <span>모바일 쿠폰</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [결제창 3 ] - 카드결제 가이드 -->
+    <div class="modal-overlay" id="payment-guide-modal" style="display: none;">
+        <div class="payment-guide-modal">
+            <div class="payment-guide-header">우측 하단의 카드 리더기에 카드를 끝까지 삽입해주세요</div>
+            <img src="img/결제/카드결제.png" alt="카드 삽입 안내 이미지" class="payment-guide-image">
+            <button class="btn close" onclick="insertCard()">카드 삽입</button>
+        </div>
+    </div>
+
+      <!--  [결제창 4 ]영수증 출력  여부 -->
+    <div class="receipt-modal" id="receipt-modal">
+        <div class="receipt-modal-header">영수증을 출력하시겠습니까?</div>
+        <div class="receipt-modal-buttons">
+            <button class="btn yes" onclick="showPaymentCompleteModal()">예</button>
+            <button class="btn no" onclick="skipReceiptAndShowComplete()">아니오</button>
+        </div>
+    </div>
+
+      <!-- [결제창 5 ] 결제 완료, 주문번호 출력  -->
+    <div class="payment-complete-overlay" id="payment-complete-overlay">
+        <div class="payment-complete-modal">
+            <div class="payment-complete-header">결제가 완료 되었습니다다</div>
+            <div class="payment-complete-text">메뉴가 준비되면 주문번호 호출모니터로 안내해 드립니다  감사합니다</div>
+            <img src="img/결제/영수증.png" alt="영수증 이미지" class="receipt-image">
+            <div class="order-number">주문번호 142</div>
+        </div>
+    </div>
+
+    <script>
+    
+        
+
+    // 주문내역 확인 모달창 열기
         function showModal() {
             const modal = document.getElementById('order-modal');
             const orderSummary = document.getElementById('order-summary');
+            const totalQuantity = document.getElementById('total-quantity');
+            const totalAmount = document.getElementById('total-amount');
+
             modal.style.display = 'flex';
 
-            // 주문 내역 업데이트
             orderSummary.innerHTML = '';
+            let totalQty = 0;
+            let totalPrice = 0;
+
+            // 주문 내역 에서 불러오기기
             cartItems.forEach(item => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${item.name} - ${item.quantity}개 - ${item.price * item.quantity}원`;
-                orderSummary.appendChild(listItem);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price * item.quantity}원</td>
+                `;
+                
+                orderSummary.appendChild(row);
+                totalQty += item.quantity;
+                totalPrice += item.price * item.quantity;
             });
+
+            totalQuantity.textContent = `${totalQty}`;
+            totalAmount.textContent = `${totalPrice}`;
         }
 
-        // 창 닫기
+
+        // 주문내역 확인 모달창 닫기
         function closeModal() {
             const modal = document.getElementById('order-modal');
             modal.style.display = 'none';
         }
 
-        // 주문 완료 alert 
-        function confirmOrder() {
-            alert('주문이 완료되었습니다!');
-            closeModal();
-            clearCart();
+        
+
+        // 결제 안내 모달 열기
+        function showPaymentGuideModal() {
+            const paymentGuideModal = document.getElementById('payment-guide-modal');
+            paymentGuideModal.style.display = 'flex';
         }
 
+        // 결제 안내 모달 닫기
+        function closePaymentGuideModal() {
+            const paymentGuideModal = document.getElementById('payment-guide-modal');
+            paymentGuideModal.style.display = 'none';
+        }
+
+        // 결제하기 버튼에 결제 안내 모달 연결
+        function showPaymentModal() {
+            closeModal(); // 기존 주문 내역 모달 닫기
+            showPaymentGuideModal(); // 결제 안내 모달 열기
+        }
+        
+        // 결제 방법 선택 모달 열기
+        function showPaymentMethodModal() {
+            const paymentMethodModal = document.getElementById('payment-method-modal');
+            const paymentTotalAmount = document.getElementById('payment-total-amount');
+            const totalAmount = document.getElementById('total-amount').textContent;
+            paymentTotalAmount.textContent = totalAmount;
+            paymentMethodModal.style.display = 'flex';
+        }
+
+        // 결제 방법 선택 모달 닫기
+        function closePaymentMethodModal() {
+            const paymentMethodModal = document.getElementById('payment-method-modal');
+            paymentMethodModal.style.display = 'none';
+        }
+
+        // 결제 안내 모달 창
+        function selectPayment() {
+            closePaymentMethodModal(); // 결제 방법 모달 닫기
+            showPaymentGuideModal(); // 결제 안내 모달 열기
+        }
+
+        // 결제하기 버튼에 결제 방법 모달 연결
+        function showPaymentModal() {
+            closeModal(); // 기존 주문 내역 모달 닫기
+            showPaymentMethodModal(); // 결제 방법 모달 열기
+        }
+
+        // 카드 삽입 버튼 클릭 시 영수증 출력 모달 열기
+        function showReceiptModal() {
+            const receiptModal = document.getElementById('receipt-modal');
+            receiptModal.style.display = 'block';
+        }
+
+        // 영수증 출력 모달 닫기
+        function closeReceiptModal() {
+            const receiptModal = document.getElementById('receipt-modal');
+            receiptModal.style.display = 'none';
+        }
+
+        // 카드 삽입 버튼 동작 수정
+        function insertCard() {
+            showReceiptModal(); // 영수증 출력 모달 열기
+        }
+
+        // 모든 모달창 닫기
+        function closeAllModals() {
+            clearCart(); // 장바구니 비우기
+            const modals = document.querySelectorAll('.modal-overlay, .receipt-modal');
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // 영수증 출력 모달에서 "예" 버튼 클릭 시 결제 완료 모달 열기
+        function showPaymentCompleteModal() {
+            closeAllModals(); // 모든 모달창 닫기
+            const paymentCompleteOverlay = document.getElementById('payment-complete-overlay');
+            paymentCompleteOverlay.style.display = 'flex';
+
+            // 5초 후 결제 완료 모달 닫기
+            setTimeout(() => {
+                paymentCompleteOverlay.style.display = 'none';
+            }, 5000);
+        }
+
+        // 영수증 출력 모달에서 "아니오" 버튼 클릭 시 결제 완료 모달 열기
+        function skipReceiptAndShowComplete() {
+            showPaymentCompleteModal();
+        }
+        
     </script>
 </body>
 </html>
