@@ -27,8 +27,9 @@
             background: #3c383c41; 
             height: 5vh;
             display: flex;
-            justify-content: center; 
+            justify-content: space-between; /* 양쪽 정렬 */
             align-items: center; 
+            padding: 0 20px; /* 좌우 여백 추가 */
         }
 
         main{
@@ -73,6 +74,30 @@
         .btn:active {
             background-color: #e8e6e6;
         }
+        .top-bar h1 {
+            color: white; 
+            font-size: 24px;
+        }
+
+        .bottom-bar button {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .bottom-bar button:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .bottom-bar button:active {
+            background-color: #e8e6e6;
+        }
     </style>
 </head>
 <body>
@@ -80,7 +105,9 @@
 
 
     <header>
-        <div class = "top-bar"></div>
+        <div class = "top-bar">
+            <h1>키오스크 체험 교육</h1>
+        </div>
     </header>    
 
 
@@ -96,7 +123,10 @@
     </main>
 
     <fotter>
-        <div class="bottom-bar"></div>
+        <div class="bottom-bar">
+            <button onclick="location.href='index.html'">홈</button>
+            <button onclick="history.back()">뒤로가기</button>
+        </div>
     </fotter>
 
 

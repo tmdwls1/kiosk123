@@ -1,75 +1,130 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/choice.css">
-    <title>이미지 선택 화면</title>
+    <title>키오스크 메인 화면</title>
+    <style>
+        *{
+            margin:0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #55555542;
+            padding:  0 300px;
+        }
+
+        .top-bar{
+            background: #3c383c41; 
+            height: 5vh;
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+        }
+        .bottom-bar{
+            background: #3c383c41; 
+            height: 5vh;
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        main{
+            background: #f5f5f5; 
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        .kiosk-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 3x2 형태로 변경 */
+            grid-template-rows: repeat(3, auto); /* 3행으로 설정 */
+            gap: 20px;
+            width: 70%;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .kiosk-item {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .kiosk-item:hover {
+            transform: scale(1.02);
+            background-color: #f0f0f0;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);  
+        }
+
+        .kiosk-item img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        .kiosk-item div {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        .top-bar h1 {
+            color: white; 
+            font-size: 24px;
+        }
+    </style>
 </head>
-
 <body>
+    
 
-    <h1>키오스크를 선택해 주세요</h1>
 
-    <div class="container">
-        <span class="arrow" onclick="prevImages()">⟨</span>
-        <div class="cards-wrapper">
-            <div class="cards-container" id="cardsContainer">
-                <div class="card">
-                    <a href="음식점_키오스크.html"><img src="img/food.png" alt="패스트푸드"></a>
-                    <div>음식점</div>
-                </div>
-                <div class="card">
-                    <img src="img/coffee.png" alt="커피숍">
-                    <div>커피</div>
-                </div>
-                <div class="card">
-                    <img src="img/atm.png" alt="은행 atm">
-                    <div>은행 atm</div>
-                </div>
-                <div class="card">
-                    <img src="img/bus.png" alt="영화관 예약">
-                    <div>버스 예매</div>
-                </div>
-                <div class="card">
-                    <img src="img/airplane.png" alt="비행기 예약">
-                    <div>비행기 예매</div>
-                </div>
-                <div class="card">
-                    <img src="img/train.png" alt="기차 예약">
-                    <div>기차 예매</div>
-                </div>
+    <header>
+        <div class = "top-bar">
+            <h1>키오스크 체험 교육</h1>
+        </div>
+    </header>    
+
+
+    <!-- 메인  -->
+
+    <main>
+        <div class="kiosk-grid">
+            <div class="kiosk-item" onclick="location.href='음식점_키오스크.html'">
+                <img src="img/food.png" alt="음식점" >
+                <div>음식점</div>
+            </div>
+            <div class="kiosk-item">
+                <img src="img/train.png" alt="KTX(기차)">
+                <div>KTX(기차)</div>
+            </div>
+            <div class="kiosk-item">
+                <img src="img/coffee.png" alt="카페">
+                <div>카페</div>
+            </div>
+            <div class="kiosk-item">
+                <img src="img/atm.png" alt="ATM(은행)">
+                <div>ATM(은행)</div>
+            </div>
+            <div class="kiosk-item">
+                <img src="img/airplane.png" alt="항공">
+                <div>항공</div>
             </div>
         </div>
-        <span class="arrow" onclick="nextImages()">⟩</span>
-    </div>
+    </main>
 
-    <script>
-        let currentIndex = 0;
-        const cardsContainer = document.getElementById('cardsContainer');
-        const cards = document.querySelectorAll('.card');
-        const cardsPerPage = 3; // 한 번에 보여줄 카드 수
-        const cardWidth = 250 + 20; // 카드 너비 + margin
+    <fotter>
+        <div class="bottom-bar"></div>
+    </fotter>
 
-        function updateDisplay() {
-            const offset = -currentIndex * cardWidth;
-            cardsContainer.style.transform = `translateX(${offset}px)`; // 부드럽게 이동
-        }
 
-        function nextImages() {
-            if (currentIndex < cards.length - cardsPerPage) {
-                currentIndex++;
-                updateDisplay();
-            }
-        }
-
-        function prevImages() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateDisplay();
-            }
-        }
-    </script>
 </body>
 </html>
